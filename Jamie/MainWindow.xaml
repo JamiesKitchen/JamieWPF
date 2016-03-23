@@ -1,0 +1,121 @@
+﻿<Window x:Class="Jamie.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:ignore="http://www.ignore.com"
+        mc:Ignorable="d ignore"
+        Height="600"
+        Width="800"
+        Title="MVVM WPF Jamie Test App"
+        DataContext="{Binding Main, Source={StaticResource Locator}}">
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Skins/MainSkin.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    <StackPanel >
+        <Menu >
+            <Button Content="New Recipe" />
+            <Button Content="Save" Command="{Binding SaveXml, Mode=OneWay}"/>
+            <Button Content="Add to Shopping List" Command="{Binding AddRecipe2ShoppingList, Mode=OneWay}" />
+            <Button Content="View Shopping List" MouseEnter="Button_MouseEnter" />
+        </Menu>
+        <Grid x:Name="LayoutRoot">
+
+        <Grid >
+            <Grid.RowDefinitions>
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="250"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+                <ListView ItemsSource="{Binding AllRecipes, Mode=TwoWay}" SelectedItem="{Binding SelectedRecipe}"  SelectedIndex="{Binding SelectedIndex}" Grid.Column="0" Grid.Row="0">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal" Height="40">
+                            <TextBlock Text="{Binding Name}" FontSize="14" TextWrapping="NoWrap" HorizontalAlignment="Left" Margin="0,0,10,0"/>
+                            <TextBlock Text="{Binding PortionQuantity}" FontSize="14" TextWrapping="NoWrap" HorizontalAlignment="Right"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+
+            <StackPanel Grid.Column="1" Grid.Row="0">
+                <TextBlock FontSize="36"
+                   FontWeight="Bold"
+                   Foreground="Purple"
+                   Text="{Binding SelectedRecipe.Name, Mode=TwoWay}"
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Center"
+                   TextWrapping="Wrap"  Grid.Column="0" Grid.Row="2" >
+                </TextBlock>
+
+                <TextBlock FontSize="12"
+                   Text="{Binding SelectedRecipe.Source, Mode=TwoWay}"
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Left"
+                   TextWrapping="Wrap"  Grid.Column="0" Grid.Row="2" />
+
+                <TextBlock FontSize="12"
+                   Text="{Binding SelectedRecipe.Summary, Mode=TwoWay}"
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Left"
+                   TextWrapping="Wrap"  Grid.Column="0" Grid.Row="2" />
+
+                    <DataGrid Name="dgTest" AutoGenerateColumns="True" IsReadOnly="True" CanUserResizeColumns="True" CanUserAddRows="False" CanUserSortColumns="True" 
+                              ItemsSource="{Binding SelectedRecipe.Ingredients, Mode=TwoWay}"
+                              SelectionMode="Single" SelectionUnit="FullRow" IsEnabledChanged="dgTest_IsEnabledChanged" 
+                              SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay, ValidatesOnDataErrors=True, UpdateSourceTrigger=LostFocus}"
+
+                              Grid.Column="0" Grid.Row="0">
+                        <!--<DataGrid.Columns>
+                            <DataGridTextColumn Header="Quantity" Binding="{Binding Quantity}" />
+                            <DataGridTextColumn Header="Unit" Binding="{Binding Unit}" />
+                            <DataGridTextColumn Header="Item" Binding="{Binding SpecificIngredient.Name}" />
+
+                            <DataGridTemplateColumn Header="Quantity">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Quantity}"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+
+                                <DataGridTemplateColumn.CellEditingTemplate>
+                                    <DataTemplate>
+                                            <TextBox x:Name="EditTextbox1" Text="{Binding Quantity, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}"  
+                                                     BorderThickness="0" IsEnabled="True"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellEditingTemplate>
+                            </DataGridTemplateColumn>
+
+                        </DataGrid.Columns>-->
+                    </DataGrid>
+
+
+                    <!--<ListView ItemsSource="{Binding SelectedRecipe.Ingredients, Mode=TwoWay}" SelectedItem="{Binding SelectedRecipe}"  SelectedIndex="{Binding SelectedIndex}" Grid.Column="0" Grid.Row="0">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal" >
+                                <TextBlock Text="{Binding Quantity}" TextWrapping="NoWrap" HorizontalAlignment="Right"/>
+                                <TextBlock Text="{Binding Unit}" TextWrapping="NoWrap" HorizontalAlignment="Right" Margin="5,0" />
+                                <TextBlock Text="{Binding SpecificIngredient.Name}" TextWrapping="NoWrap" HorizontalAlignment="Left" Margin="5,0"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>-->
+
+            </StackPanel>
+
+        </Grid>
+
+    </Grid>
+        <Frame x:Name="frame1" Content="Frame" Height="200"/>
+
+    </StackPanel >
+</Window>
