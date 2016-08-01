@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DataGridMovableRows"
         xmlns:ignore="http://www.ignore.com"
         mc:Ignorable="d ignore"
         Height="600"
@@ -34,6 +35,34 @@
                 <ColumnDefinition Width="250"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
+
+
+                <Grid.Resources>
+                    <!--DataTemplate for Published Date column defined in Grid.Resources.  PublishDate is a property on the ItemsSource of type DateTime -->
+                    <DataTemplate x:Key="DateTemplate" >
+                        <StackPanel Width="20" Height="30">
+                            <Border Background="LightBlue" BorderBrush="Black" BorderThickness="1">
+                                <TextBlock Text="{Binding PublishDate, StringFormat={}{0:MMM}}" FontSize="8" HorizontalAlignment="Center" />
+                            </Border>
+                            <Border Background="White" BorderBrush="Black" BorderThickness="1">
+                                <TextBlock Text="{Binding PublishDate, StringFormat={}{0:yyyy}}" FontSize="8" FontWeight="Bold" HorizontalAlignment="Center" />
+                            </Border>
+                        </StackPanel>
+                    </DataTemplate>
+                    <!--DataTemplate for the Published Date column when in edit mode. -->
+                    <DataTemplate x:Key="EditingDateTemplate">
+                        <DatePicker SelectedDate="{Binding PublishDate}"  />
+                    </DataTemplate>
+
+
+                    <DataTemplate x:Key="cellTemplate">
+                        <TextBlock Text="{Binding Description}"/>
+                    </DataTemplate>
+                    <DataTemplate x:Key="cellEditingTemplate">
+                        <TextBox Text="{Binding Description}"/>
+                    </DataTemplate>
+                    
+                </Grid.Resources>
 
                 <ListView ItemsSource="{Binding AllRecipes, Mode=TwoWay}" SelectedItem="{Binding SelectedRecipe}"  SelectedIndex="{Binding SelectedIndex}" Grid.Column="0" Grid.Row="0">
                 <ListView.ItemTemplate>
@@ -68,18 +97,19 @@
                    HorizontalAlignment="Left"
                    TextWrapping="Wrap"  Grid.Column="0" Grid.Row="2" />
 
-                    <DataGrid Name="dgTest" AutoGenerateColumns="True" IsReadOnly="True" CanUserResizeColumns="True" CanUserAddRows="False" CanUserSortColumns="True" 
-                              ItemsSource="{Binding SelectedRecipe.Ingredients, Mode=TwoWay}"
-                              SelectionMode="Single" SelectionUnit="FullRow" IsEnabledChanged="dgTest_IsEnabledChanged" 
+                    <DataGrid Name="dgTest" AutoGenerateColumns="False" IsReadOnly="False" CanUserResizeColumns="True" CanUserSortColumns="True" 
+                              ItemsSource="{Binding SelectedRecipe.Ingredients, Mode=TwoWay}" AllowDrop="True" 
+                              SelectionMode="Single" SelectionUnit="CellOrRowHeader" IsEnabledChanged="dgTest_IsEnabledChanged" 
                               SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay, ValidatesOnDataErrors=True, UpdateSourceTrigger=LostFocus}"
+                              CanUserDeleteRows="True" CanUserAddRows="True"
+                              local:VisualHelper.EnableRowsMove="True"
+                              Grid.Column="0" Grid.Row="2">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Quantity" Binding="{Binding Quantity, Mode=TwoWay}" />
+                            <DataGridTextColumn Header="Unit" Binding="{Binding Unit, Mode=TwoWay}" />
+                            <DataGridTextColumn Header="Item" Binding="{Binding Path=Name, Mode=TwoWay}" />
 
-                              Grid.Column="0" Grid.Row="0">
-                        <!--<DataGrid.Columns>
-                            <DataGridTextColumn Header="Quantity" Binding="{Binding Quantity}" />
-                            <DataGridTextColumn Header="Unit" Binding="{Binding Unit}" />
-                            <DataGridTextColumn Header="Item" Binding="{Binding SpecificIngredient.Name}" />
-
-                            <DataGridTemplateColumn Header="Quantity">
+                            <!--<DataGridTemplateColumn Header="Quantity 2">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding Quantity}"/>
@@ -88,13 +118,14 @@
 
                                 <DataGridTemplateColumn.CellEditingTemplate>
                                     <DataTemplate>
-                                            <TextBox x:Name="EditTextbox1" Text="{Binding Quantity, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}"  
-                                                     BorderThickness="0" IsEnabled="True"/>
+                                            <TextBox  Text="{Binding Quantity, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}"  
+                                                     BorderThickness="2" IsEnabled="True"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellEditingTemplate>
-                            </DataGridTemplateColumn>
+                            </DataGridTemplateColumn>-->
 
-                        </DataGrid.Columns>-->
+
+                        </DataGrid.Columns>
                     </DataGrid>
 
 

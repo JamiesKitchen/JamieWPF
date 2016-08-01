@@ -1,24 +1,84 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GalaSoft.MvvmLight;
 
 namespace Jamie.Model
 {
-
-    // Ein Rezept enthält eine Zutatenliste bestehend aus x Einträgen, wobei jeder die Zutat und die erforderliche Menge beschreibt.
+    // Ein Rezept enthält eine Zutatenliste bestehend aus x Einträgen, wobei jeder Eintrag eine Zutat sowie die erforderliche Menge beschreibt.
     public class IngredientRecipeSet : ObservableCollection<IngredientItem>
     {
     }
 
 
-    public class IngredientItem
+    public class IngredientItem : ObservableObject
     {
-        public Ingredient SpecificIngredient { get; set; }
-        public string Unit { get; set; }
-        public float? Quantity { get; set; }
+        Ingredient _SpecificIngredient;
+
+        public IngredientItem()
+        {
+            Ingredient _SpecificIngredient = new Ingredient();
+        }
+
+        public Ingredient SpecificIngredient
+        {
+            get { return _SpecificIngredient; }
+            set
+            {
+                if (_SpecificIngredient == value)
+                    return;
+
+                _SpecificIngredient = value;
+                RaisePropertyChanged(() => SpecificIngredient);
+            }
+        }
+
+        public string Name
+        {
+            get { return _SpecificIngredient.Name; }
+            set
+            {
+                if (_SpecificIngredient.Name == value)
+                    return;
+
+                _SpecificIngredient.Name = value;
+                RaisePropertyChanged(() => Name);
+            }
+        }
+
+        private string _Unit;
+        public string Unit
+        {
+            get { return _Unit; }
+            set
+            {
+                if (_Unit == value)
+                    return;
+
+                _Unit = value;
+                RaisePropertyChanged(() => Unit);
+
+            }
+        }
+
+        float? _Quantity;
+        public float? Quantity
+        {
+            get { return _Quantity; }
+            set
+            {
+                if (_Quantity == value)
+                    return;
+
+                _Quantity = value;
+                RaisePropertyChanged(() => Quantity);
+
+            }
+        }
     }
 
 
@@ -28,11 +88,38 @@ namespace Jamie.Model
      * länderspezifische Zuordnung?
      */
 
-    public class Ingredient
+    public class Ingredient : ObservableObject
     {
-        public string Name { get; set; }
-        public bool IsVegetarian { get; set; }
+        string _Name;
+        public string Name
+        {
+            get { return _Name; }
+            set
+            {
+                if (_Name == value)
+                    return;
+
+                _Name = value;
+                RaisePropertyChanged(() => Name);
+            }
+        }
+
+        
+
+        private bool? _IsVegetarian;
+
+        public bool? IsVegetarian
+        {
+            get { return _IsVegetarian; }
+            set {
+                if (_IsVegetarian == value)
+                    return;
+
+                _IsVegetarian = value;
+                RaisePropertyChanged(() => IsVegetarian);
+
+            }
+        }
+
     }
-
-
 }
