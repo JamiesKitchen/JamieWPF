@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
+using System.Text.RegularExpressions;
 
 namespace Jamie.Model
 {
@@ -21,7 +22,7 @@ namespace Jamie.Model
 
         public IngredientItem()
         {
-            Ingredient _SpecificIngredient = new Ingredient();
+            _SpecificIngredient = new Ingredient();
         }
 
         public Ingredient SpecificIngredient
@@ -39,7 +40,7 @@ namespace Jamie.Model
 
         public string Name
         {
-            get { return _SpecificIngredient.Name; }
+            get { return _SpecificIngredient != null ? _SpecificIngredient.Name : ""; }
             set
             {
                 if (_SpecificIngredient.Name == value)
@@ -79,6 +80,8 @@ namespace Jamie.Model
 
             }
         }
+
+
     }
 
 
@@ -104,14 +107,15 @@ namespace Jamie.Model
             }
         }
 
-        
+
 
         private bool? _IsVegetarian;
 
         public bool? IsVegetarian
         {
             get { return _IsVegetarian; }
-            set {
+            set
+            {
                 if (_IsVegetarian == value)
                     return;
 

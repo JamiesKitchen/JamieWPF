@@ -180,6 +180,38 @@ namespace Jamie.ViewModel
 
 
 
+        #region Add new Ingredient
+
+        private RelayCommand _AddNewIngredient;
+        public RelayCommand AddNewIngredient
+        {
+            get
+            {
+                _AddNewIngredient = _AddNewIngredient ?? (_AddNewIngredient = new RelayCommand(ExecAddNewIngredient, CanAddNewIngredient));
+                return _AddNewIngredient;
+            }
+        }
+
+        /// <summary>
+        /// Checks whether the AddNewIngredient command is executable
+        /// </summary>
+        private bool CanAddNewIngredient()
+        {
+            return SelectedRecipe != null;
+        }
+
+        /// <summary>
+        /// Executes the AddNewIngredient command 
+        /// </summary>
+        private void ExecAddNewIngredient()
+        {
+            SelectedRecipe.Ingredients.Add(new IngredientItem());
+        }
+
+
+        #endregion
+
+
 
         #region Define Relay Command AddRecipe2ShoppingList
         private RelayCommand _addRecipe2ShoppingList;
@@ -205,10 +237,103 @@ namespace Jamie.ViewModel
         private void ExecAddRecipe2ShoppingList()
         {
             _ActualShoppingList.addRecipe(SelectedRecipe);
+            //_ViewShoppingList.RaiseCanExecuteChanged();
+            _ClearShoppingList.RaiseCanExecuteChanged();
         }
         #endregion
 
 
+        #region View Shopping List Command
+        private RelayCommand _ViewShoppingList;
+        public RelayCommand ViewShoppingList
+        {
+            get
+            {
+                return _ViewShoppingList ?? (_ViewShoppingList = new RelayCommand(ExecViewShoppingList, CanViewShoppingList));
+            }
+        }
+
+        /// <summary>
+        /// Checks whether the ViewShoppingList command is executable
+        /// </summary>
+        private bool CanViewShoppingList()
+        {
+            bool result = false;
+            result = _ActualShoppingList != null ? _ActualShoppingList.Items.Count > 0 : false;
+            return result;
+        }
+
+        /// <summary>
+        /// Executes the ViewShoppingList command 
+        /// </summary>
+        private void ExecViewShoppingList()
+        {
+            throw new NotImplementedException();
+        }
+        #endregion
+
+
+
+        #region New Recipe
+
+        private RelayCommand _NewRecipe;
+        public RelayCommand NewRecipe
+        {
+            get
+            {
+                _NewRecipe = _NewRecipe ?? (_NewRecipe = new RelayCommand(ExecNewRecipe, CanNewRecipe));
+                return _NewRecipe;
+            }
+        }
+
+        /// <summary>
+        /// Checks whether the NewRecipe command is executable
+        /// </summary>
+        private bool CanNewRecipe()
+        {
+            return true;
+        }
+
+        /// <summary>
+        /// Executes the NewRecipe command 
+        /// </summary>
+        private void ExecNewRecipe()
+        {
+            _AllRecipes.Add(new Recipe());
+        }
+        #endregion
+
+
+        #region Clear Shopping List
+
+        private RelayCommand _ClearShoppingList;
+        public RelayCommand ClearShoppingList
+        {
+            get
+            {
+                _ClearShoppingList = _ClearShoppingList ?? (_ClearShoppingList = new RelayCommand(ExecClearShoppingList, CanClearShoppingList));
+                return _ClearShoppingList;
+            }
+        }
+
+        /// <summary>
+        /// Checks whether the ClearShoppingList command is executable
+        /// </summary>
+        private bool CanClearShoppingList()
+        {
+            return _ActualShoppingList != null ? _ActualShoppingList.Items.Count > 0 : false;
+        }
+
+        /// <summary>
+        /// Executes the ClearShoppingList command 
+        /// </summary>
+        private void ExecClearShoppingList()
+        {
+            _ActualShoppingList.Items.Clear();
+        }
+
+
+        #endregion
 
 
 

@@ -1,6 +1,8 @@
 ﻿using System.Windows;
 using Jamie.ViewModel;
 using System;
+using System.Windows.Documents;
+using System.Diagnostics;
 
 namespace Jamie
 {
@@ -27,5 +29,19 @@ namespace Jamie
         {
 
         }
+
+        private void Hyperlink_RequestNavigate(object sender, System.Windows.Navigation.RequestNavigateEventArgs e)
+        {
+            Hyperlink hl = (Hyperlink)sender;
+
+            string navigateUri = hl.NavigateUri.ToString();
+
+            Process.Start(new ProcessStartInfo(navigateUri));
+
+            e.Handled = true;
+
+        }
+
+
     }
 }

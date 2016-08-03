@@ -12,7 +12,7 @@ namespace Jamie.Model
     public class DataSourceSimpleXml<T>
     {
 
-        internal static string GetSkyDriveUserFolder()
+        internal static string GetOneDriveUserFolder()
         {
             RegistryKey subkey;
 
@@ -28,7 +28,7 @@ namespace Jamie.Model
         public static void Serialize(T list, string filepath)
         {
             XmlSerializer serializer = new XmlSerializer(typeof(T));
-            using (TextWriter writer = new StreamWriter(string.Format(@"{0}{1}", GetSkyDriveUserFolder(), filepath)))
+            using (TextWriter writer = new StreamWriter(string.Format(@"{0}{1}", GetOneDriveUserFolder(), filepath)))
             {
                 serializer.Serialize(writer, list);
             }
@@ -37,7 +37,7 @@ namespace Jamie.Model
         public static T Deserialize(string filepath)
         {
             XmlSerializer serializer = new XmlSerializer(typeof(T));
-            using (TextReader reader = new StreamReader(string.Format(@"{0}{1}", GetSkyDriveUserFolder(), filepath)))
+            using (TextReader reader = new StreamReader(string.Format(@"{0}{1}", GetOneDriveUserFolder(), filepath)))
             {
                 return (T)serializer.Deserialize(reader);
             }

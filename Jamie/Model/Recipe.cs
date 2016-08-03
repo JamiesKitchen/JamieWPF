@@ -15,18 +15,29 @@ namespace Jamie.Model
 
     /* Ein Rezept ist für eine Portionsanzahl ausgelegt.
      * Rezepte generieren ein Gesamtmerkmal aus den einzelnen Merkmalen von allen Zutaten
-     * 
-     * 
      */
 
     public class Recipe
     {
+        public Recipe()
+        {
+            _Ingredients = new IngredientRecipeSet();
+        }
+
         public string Name { get; set; }
         public string Summary { get; set; } // Summary
         public int PortionQuantity { get; set; } // Portion min max berücksichtigen
         public string Source {get; set; }
         public string Page { get; set; }
         public bool ToTakeAway { get; set; }
-        public IngredientRecipeSet Ingredients { get; set; }
+
+        private IngredientRecipeSet _Ingredients;
+
+        public IngredientRecipeSet Ingredients
+        {
+            get { return _Ingredients; }
+            set { _Ingredients = value; }
+        }
+
     }
 }

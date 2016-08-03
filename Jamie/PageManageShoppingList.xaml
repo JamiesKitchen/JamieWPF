@@ -5,13 +5,30 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       mc:Ignorable="d" 
       DataContext="{Binding Main, Source={StaticResource Locator}}"
-      d:DesignHeight="300" d:DesignWidth="300"
+     
 	Title="Manage Shopping List">
 
     <Grid>
         <StackPanel Grid.Row="1"
-            Margin="120,0,120,60">
-            <TextBlock HorizontalAlignment="Left" Name="tb1" Text="{Binding SelectedRecipe.Name}"/>
+            Margin="20,0,20,20">
+            <TextBox HorizontalAlignment="Left" Name="tb1" Text="{Binding ActualShoppingList.Name}"/>
+
+            <DataGrid Name="dgTest" AutoGenerateColumns="False" IsReadOnly="False" CanUserResizeColumns="True" CanUserSortColumns="True" 
+                              ItemsSource="{Binding ActualShoppingList.Items, Mode=TwoWay}" AllowDrop="True" 
+                              SelectionMode="Single" SelectionUnit="CellOrRowHeader" ScrollViewer.CanContentScroll="True"
+                              SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay, ValidatesOnDataErrors=True, UpdateSourceTrigger=LostFocus}"
+                              CanUserDeleteRows="True" CanUserAddRows="True"
+                                FontSize="14"
+                              Grid.Column="0" Grid.Row="2">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Quantity" Binding="{Binding Quantity, Mode=TwoWay}" />
+                    <DataGridTextColumn Header="Unit" Binding="{Binding Unit, Mode=TwoWay}" />
+                    <DataGridTextColumn Header="Item" Binding="{Binding Path=SpecificIngredient.Name, Mode=TwoWay}" />
+
+                </DataGrid.Columns>
+            </DataGrid>
+
+
         </StackPanel>
     </Grid>
 </Page>

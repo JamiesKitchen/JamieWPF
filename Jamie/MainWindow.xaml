@@ -9,6 +9,7 @@
         Height="600"
         Width="800"
         Title="MVVM WPF Jamie Test App"
+        ResizeMode="CanResizeWithGrip"
         DataContext="{Binding Main, Source={StaticResource Locator}}">
 
     <Window.Resources>
@@ -20,21 +21,22 @@
     </Window.Resources>
     <StackPanel >
         <Menu >
-            <Button Content="New Recipe" />
+            <Button Content="New Recipe" Command="{Binding NewRecipe, Mode=OneWay}"/>
             <Button Content="Save" Command="{Binding SaveXml, Mode=OneWay}"/>
+            <Button Content="Add Ingredient" Command="{Binding AddNewIngredient, Mode=OneWay}" />
             <Button Content="Add to Shopping List" Command="{Binding AddRecipe2ShoppingList, Mode=OneWay}" />
-            <Button Content="View Shopping List" MouseEnter="Button_MouseEnter" />
+            <Button Content="Clear Shopping List" Command="{Binding ClearShoppingList, Mode=OneWay}"/>
         </Menu>
         <Grid x:Name="LayoutRoot">
 
-        <Grid >
-            <Grid.RowDefinitions>
-                <RowDefinition />
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="250"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
+            <Grid >
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="250"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
 
 
                 <Grid.Resources>
@@ -61,49 +63,53 @@
                     <DataTemplate x:Key="cellEditingTemplate">
                         <TextBox Text="{Binding Description}"/>
                     </DataTemplate>
-                    
+
                 </Grid.Resources>
 
                 <ListView ItemsSource="{Binding AllRecipes, Mode=TwoWay}" SelectedItem="{Binding SelectedRecipe}"  SelectedIndex="{Binding SelectedIndex}" Grid.Column="0" Grid.Row="0">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Orientation="Horizontal" Height="40">
-                            <TextBlock Text="{Binding Name}" FontSize="14" TextWrapping="NoWrap" HorizontalAlignment="Left" Margin="0,0,10,0"/>
-                            <TextBlock Text="{Binding PortionQuantity}" FontSize="14" TextWrapping="NoWrap" HorizontalAlignment="Right"/>
-                        </StackPanel>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal" Height="30">
+                                <TextBox Text="{Binding Name}" FontSize="14" TextWrapping="NoWrap" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                                <TextBox Text="{Binding PortionQuantity}" FontSize="14" TextWrapping="NoWrap" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
 
-            <StackPanel Grid.Column="1" Grid.Row="0">
-                <TextBlock FontSize="36"
+                <StackPanel Grid.Column="1" Grid.Row="0">
+                    <TextBlock FontSize="36"
                    FontWeight="Bold"
                    Foreground="Purple"
                    Text="{Binding SelectedRecipe.Name, Mode=TwoWay}"
                    VerticalAlignment="Center"
                    HorizontalAlignment="Center"
                    TextWrapping="Wrap"  Grid.Column="0" Grid.Row="2" >
-                </TextBlock>
+                    </TextBlock>
 
-                <TextBlock FontSize="12"
-                   Text="{Binding SelectedRecipe.Source, Mode=TwoWay}"
-                   VerticalAlignment="Center"
-                   HorizontalAlignment="Left"
-                   TextWrapping="Wrap"  Grid.Column="0" Grid.Row="2" />
+                    <TextBlock FontSize="14" VerticalAlignment="Center" HorizontalAlignment="Left"
+                       TextWrapping="Wrap"  Grid.Column="0" Grid.Row="2" >
+                        <Hyperlink NavigateUri ="{Binding SelectedRecipe.Source, Mode=TwoWay}" 
+                                   RequestNavigate = "Hyperlink_RequestNavigate" >
+                             <TextBlock Text="{Binding SelectedRecipe.Source, Mode=TwoWay}" />
+                        </Hyperlink>
+                    </TextBlock>
 
-                <TextBlock FontSize="12"
-                   Text="{Binding SelectedRecipe.Summary, Mode=TwoWay}"
-                   VerticalAlignment="Center"
-                   HorizontalAlignment="Left"
-                   TextWrapping="Wrap"  Grid.Column="0" Grid.Row="2" />
+                    <TextBox FontSize="14"
+                               Text="{Binding SelectedRecipe.Summary, Mode=TwoWay}"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Left"
+                               TextWrapping="Wrap"  Grid.Column="0" Grid.Row="2" />
 
                     <DataGrid Name="dgTest" AutoGenerateColumns="False" IsReadOnly="False" CanUserResizeColumns="True" CanUserSortColumns="True" 
                               ItemsSource="{Binding SelectedRecipe.Ingredients, Mode=TwoWay}" AllowDrop="True" 
                               SelectionMode="Single" SelectionUnit="CellOrRowHeader" IsEnabledChanged="dgTest_IsEnabledChanged" 
                               SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay, ValidatesOnDataErrors=True, UpdateSourceTrigger=LostFocus}"
-                              CanUserDeleteRows="True" CanUserAddRows="True"
+                              FontSize="14"
+                              CanUserDeleteRows="True" CanUserAddRows="False"
                               local:VisualHelper.EnableRowsMove="True"
-                              Grid.Column="0" Grid.Row="2">
+                              Grid.Column="0" Grid.Row="2"
+                              >
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Quantity" Binding="{Binding Quantity, Mode=TwoWay}" />
                             <DataGridTextColumn Header="Unit" Binding="{Binding Unit, Mode=TwoWay}" />
@@ -141,12 +147,13 @@
                     </ListView.ItemTemplate>
                 </ListView>-->
 
-            </StackPanel>
+                </StackPanel>
+
+            </Grid>
 
         </Grid>
-
-    </Grid>
-        <Frame x:Name="frame1" Content="Frame" Height="200"/>
+        <Frame x:Name="frame1" Content="Frame" Source="PageManageShoppingList.xaml"
+               JournalOwnership="OwnsJournal" NavigationUIVisibility="Hidden" />
 
     </StackPanel >
 </Window>
